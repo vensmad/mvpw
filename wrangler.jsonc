@@ -1,0 +1,7 @@
+{
+  "name": "mvpw",
+  "compatibility_date": "2026-08-04",
+  "assets": {
+    "directory": "./public"
+  }
+}
