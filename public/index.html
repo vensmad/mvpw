@@ -4,369 +4,986 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mads Vendelbo</title>
-  <meta name="description" content="Mads Vendelbo — welcome to my little corner of the internet.">
+  <meta name="description" content="Mads Vendelbo — Head of Growth. Strategy, experiments, execution.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/shared.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --gb-darkest: #0f380f;
-      --gb-dark: #306230;
-      --gb-light: #8bac0f;
-      --gb-lightest: #9bbc0f;
+      --sky: #58a9e6;
+      --sky-deep: #4d9fe0;
+      --orange: #292929;
+      --navy: #131313;
+      --navy-line: #2e2e2e;
+      --card-r: 16px;
+      --mono: "Roboto Mono", monospace;
     }
 
     body {
-      background: var(--gb-darkest);
-      font-family: "Press Start 2P", monospace;
+      background-color: #f4f4f4;
+      background-image: radial-gradient(circle, #e4e4e2 1px, transparent 1px);
+      background-size: 28px 28px;
+      min-height: 100vh;
+      font-family: "Inter", -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .site-head { position: relative; z-index: 5; }
+
+    /* bento */
+    .bento {
+      position: relative;
+      z-index: 1;
+      max-width: var(--page-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .tile {
+      background: #fff;
+      border-radius: var(--card-r);
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 1px 5px -4px rgba(19,19,22,0.7), 0 0 0 1px rgba(34,42,53,0.08);
+    }
+
+    .tile-label {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #9aa5b1;
+      text-transform: uppercase;
+    }
+
+    /* statement */
+    .statement {
+      grid-column: span 7;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .statement h2 { margin-top: 44px; }
+
+    .ks-stats { display: flex; gap: 48px; margin-top: auto; padding: 28px 0; }
+    .ks-stats b { display: block; font-size: 27px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+    .ks-stats span {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8e8e93;
+    }
+
+    .statement h2 {
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .statement h2 em { font-style: normal; color: var(--orange); }
+
+    .statement .body { font-size: 17px; line-height: 1.6; color: #46505c; max-width: 52ch; margin-top: 18px; }
+    .statement .body strong { color: var(--navy); }
+
+    .statement .foot {
+      padding-top: 24px;
+      border-top: 1px solid #e8eaee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #8d97a3;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .avail { color: #12b76a; display: flex; align-items: center; gap: 8px; }
+    .avail::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #12b76a; box-shadow: 0 0 0 3px rgba(18,183,106,0.25); }
+
+    /* right stack */
+    .rstack { grid-column: span 5; display: flex; flex-direction: column; gap: 20px; }
+
+    .xp {
+      background: var(--card);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .frame-card .tile-label { color: #6d7a88; }
+
+    .deck { position: relative; margin-top: 24px; margin-bottom: 44px; }
+
+    /* back cards dissolve into the bottom of the card */
+    .deck::after {
+      content: "";
+      position: absolute;
+      left: -10px;
+      right: -10px;
+      top: 100%;
+      height: 66px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #fff 72%);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+
+    .xp-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 15px 17px;
+      box-shadow: 0 5px 14px -8px rgba(19,19,22,0.35), 0 0 0 1px rgba(34,42,53,0.08);
+      transition: transform 0.45s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.45s ease;
+      transform-origin: bottom center;
+    }
+
+    .deck { height: 74px; touch-action: none; }
+    .xp-row { position: absolute; left: 0; right: 0; top: 0; }
+    .xp-row.pos-0 { transform: none; opacity: 1; z-index: 4; cursor: grab; }
+    .xp-row.pos-0:active { cursor: grabbing; }
+    .xp-row.pos-1 { transform: translateY(15px) scale(0.945); opacity: 0.65; z-index: 3; }
+    .xp-row.pos-2 { transform: translateY(28px) scale(0.895); opacity: 0.4; z-index: 2; }
+    .xp-row.pos-3 { transform: translateY(39px) scale(0.85); opacity: 0.22; z-index: 1; }
+
+    .xp:hover .xp-row.pos-1 { transform: translateY(22px) scale(0.95); opacity: 0.8; }
+    .xp:hover .xp-row.pos-2 { transform: translateY(41px) scale(0.9); opacity: 0.5; }
+    .xp:hover .xp-row.pos-3 { transform: translateY(58px) scale(0.855); opacity: 0.3; }
+
+    .xp-ava {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #1a1a1a;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .xp-who { display: flex; flex-direction: column; line-height: 1.4; min-width: 0; flex: 1; }
+    .xp-who strong { font-size: 14.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xp-who small { font-size: 12.5px; color: #8e8e93; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .xp-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      line-height: 1.3;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .xp-meta strong { font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .xp-period { font-size: 11px; color: #8e8e93; font-variant-numeric: tabular-nums; }
+    .xp-period.now {
+      color: #15803d;
+      background: #e8f7ee;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 1px 8px;
+      border-radius: 999px;
+    }
+
+    /* side project */
+    .caps { padding-top: 52px; }
+
+    .sp-head { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; }
+
+    .sp-ava {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #1a1a1a;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    .sp-who { display: flex; flex-direction: column; line-height: 1.4; }
+    .sp-who strong { font-size: 14.5px; font-weight: 600; }
+    .sp-who small { font-size: 12.5px; color: #8e8e93; }
+
+    .sp-title {
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    .sp-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .sp-pill {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #52525b;
+      background: #f1f1f0;
+      border-radius: 999px;
+      padding: 5px 11px;
+    }
+
+    /* bottom row */
+    .frame-card {
+      grid-column: span 4;
+      background: var(--navy);
+      color: #fff;
+      background-image: radial-gradient(circle, #2e2e2e 1.2px, transparent 1.2px);
+      background-size: 22px 22px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+    }
+
+    .mini-wrap { flex: 1; position: relative; min-height: 118px; margin-top: 24px; }
+
+    .mini-frame {
+      background: #1d1d1d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 13px 14px;
+      position: absolute;
+      top: 0; left: 0;
+      width: 62%;
+      height: 68%;
+      transition: width 1s cubic-bezier(0.33,0,0.2,1), height 1s cubic-bezier(0.33,0,0.2,1), opacity 0.35s ease;
+    }
+
+    .frame-card.grow .mini-frame { width: 100%; height: 100%; }
+    .frame-card.fade-out .mini-frame { opacity: 0; }
+
+    .mini-frame .dot { opacity: 0; transform: translateY(5px); transition: opacity 0.45s ease, transform 0.45s ease; }
+    .frame-card.show-eyeb .dot { opacity: 1; transform: none; }
+
+    .mini-frame h3 .ln { clip-path: inset(-5% 102% -5% 0); transition: clip-path 0.55s ease; display: inline-block; }
+    .mini-frame h3 em.ln { display: block; }
+    .frame-card.show-l1 .ln-1 { clip-path: inset(-5% -5% -5% 0); }
+    .frame-card.show-l2 .ln-2 { clip-path: inset(-5% -5% -5% 0); }
+
+    .mini-btn { opacity: 0; transform: translateY(8px) scale(0.95); transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.2,0.8,0.3,1.15); }
+    .frame-card.show-btn .mini-btn { opacity: 1; transform: none; }
+
+    .live-sel { position: absolute; inset: -1px; border: 1px solid #8b9299; border-radius: 12px; opacity: 1; transition: opacity 0.3s ease; pointer-events: none; }
+    .live-sel i { position: absolute; width: 7px; height: 7px; background: #fff; border: 1px solid #8b9299; border-radius: 1px; }
+    .live-sel .tl { top: -4px; left: -4px; }
+    .live-sel .tr { top: -4px; right: -4px; }
+    .live-sel .bl { bottom: -4px; left: -4px; }
+    .live-sel .br { bottom: -4px; right: -4px; }
+    .frame-card.done .live-sel { opacity: 0; }
+
+    .live-dim {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 500;
+      background: #4b4b4b;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+    .frame-card.done .live-dim { opacity: 0; }
+
+    .live-curs {
+      position: absolute;
+      left: 100%; top: 100%;
+      margin: -3px 0 0 -3px;
+      transition: left 0.9s ease-in-out, top 0.9s ease-in-out, opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 3;
+      display: flex;
+      align-items: flex-start;
+    }
+    .live-curs .lab {
+      background: #fff;
+      color: #111;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin: 14px 0 0 -2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+      white-space: nowrap;
+    }
+    .frame-card.c-text .live-curs { left: 46%; top: 30%; }
+    .frame-card.c-btn .live-curs { left: 34%; top: 76%; }
+    .frame-card.fade-out .live-curs { opacity: 0; }
+
+    .mini-frame .dot { color: #9ca3af; font-size: 10px; font-family: var(--mono); font-weight: 700; letter-spacing: 0.12em; }
+    .mini-frame h3 { font-family: "Inter", sans-serif; font-weight: 700; font-size: 18px; margin: 4px 0 7px; line-height: 1.15; }
+    .mini-frame h3 em { font-style: normal; color: #9ca3af; display: block; }
+
+    .mini-btn {
+      display: inline-block;
+      background: #fff;
+      color: #111;
+      font-weight: 700;
+      font-size: 12px;
+      border-radius: 7px;
+      padding: 6px 12px;
+    }
+
+    .frame-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    .frame-badge { background: var(--orange); padding: 4px 8px; border-radius: 4px; font-size: 10px; }
+    .frame-badge small { display: block; background: #4b4b4b; margin: 4px -8px -4px; padding: 2px 8px; border-radius: 0 0 4px 4px; }
+
+    .building { grid-column: span 4; }
+
+    .frame-card, .building, .review { padding: 24px; }
+
+    /* full-card day/night sky, follows Copenhagen */
+    .dn-sky { position: absolute; inset: 0; border-radius: var(--card-r); transition: opacity 0.9s ease; }
+    .sky-day { background: linear-gradient(150deg, #9dd6f9, #d6eeff); opacity: 1; }
+    .sky-night {
+      background:
+        radial-gradient(circle 1.2px at 14% 22%, #fff 1.2px, transparent 2px),
+        radial-gradient(circle 1px at 38% 12%, rgba(255,255,255,0.85) 1px, transparent 1.8px),
+        radial-gradient(circle 1.3px at 64% 30%, rgba(255,255,255,0.9) 1.3px, transparent 2px),
+        radial-gradient(circle 1px at 82% 14%, rgba(255,255,255,0.7) 1px, transparent 1.8px),
+        radial-gradient(circle 1px at 26% 64%, rgba(255,255,255,0.6) 1px, transparent 1.8px),
+        radial-gradient(circle 1.2px at 74% 72%, rgba(255,255,255,0.75) 1.2px, transparent 2px),
+        radial-gradient(circle 1px at 52% 86%, rgba(255,255,255,0.55) 1px, transparent 1.8px),
+        linear-gradient(150deg, #141a33, #2b3159);
+      opacity: 0;
+    }
+    .building.night .sky-day { opacity: 0; }
+    .building.night .sky-night { opacity: 1; }
+
+    .busy-celestial {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      left: 80%;
+      top: 20%;
+      z-index: 0;
+    }
+    .busy-celestial svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 0.5s ease 0.2s; }
+    .dn-sun { opacity: 1; animation: dn-spin 16s linear infinite; }
+    .dn-moon { opacity: 0; }
+    .building.night .dn-sun { opacity: 0; }
+    .building.night .dn-moon { opacity: 1; }
+    @keyframes dn-spin { to { transform: rotate(360deg); } }
+
+    .busy-inner { position: relative; z-index: 1; }
+
+    .busy-label { z-index: 2; color: rgba(20, 32, 43, 0.55); transition: color 0.9s ease; }
+    .building.night .busy-label { color: rgba(255, 255, 255, 0.6); }
+
+    .busy-title {
+      font-size: clamp(26px, 2.4vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #14202b;
+      margin-top: 54px;
+      transition: color 0.9s ease;
+    }
+    .building.night .busy-title { color: #fff; }
+
+    .busy-foot { margin-top: 26px; }
+
+    .busy-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .building.night .busy-bar { display: flex; }
+
+    .busy-bar .track {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.18);
       overflow: hidden;
     }
 
-    .hero {
-      position: relative;
-      height: 100vh;
-      height: 100svh;
+    .busy-bar .track i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: #fff;
+      border-radius: 2px;
+      transition: width 1s ease;
+    }
+
+    .busy-meta {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      gap: 18px;
-      padding: 16px;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(20, 32, 43, 0.65);
+      transition: color 0.9s ease;
     }
 
-    .title {
-      color: var(--gb-lightest);
-      font-size: clamp(10px, 2.2vw, 18px);
-      letter-spacing: 2px;
-      text-align: center;
-      animation: blinkIn 0.1s 0.2s both;
+    .building.night .busy-meta { color: rgba(255, 255, 255, 0.65); }
+
+    .busy-badge {
+      background: rgba(20, 32, 43, 0.08);
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 9.5px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      transition: background 0.9s ease;
     }
 
-    canvas {
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-      cursor: crosshair;
+    .building.night .busy-badge { background: rgba(255, 255, 255, 0.14); }
+    .review { grid-column: span 4; }
+    .stars { color: var(--orange); font-size: 18px; letter-spacing: 3px; margin: 24px 0 12px; }
+    .review blockquote { font-size: 16.5px; line-height: 1.55; font-weight: 600; color: var(--navy); }
+
+    .review blockquote { min-height: 74px; transition: opacity 0.18s ease; }
+    .review .reviewer { transition: opacity 0.18s ease; }
+    .review.swapping blockquote, .review.swapping .reviewer { opacity: 0; }
+
+    .rev-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
     }
 
-    .dialog {
-      width: min(92vw, 640px);
-      background: var(--gb-lightest);
-      color: var(--gb-darkest);
-      border: 4px solid var(--gb-darkest);
-      box-shadow: inset 0 0 0 3px var(--gb-lightest), inset 0 0 0 6px var(--gb-darkest);
-      padding: 18px 22px;
-      font-size: clamp(8px, 1.6vw, 12px);
-      line-height: 1.9;
-      min-height: 64px;
-      position: relative;
+    .rev-nav { display: flex; gap: 7px; }
+
+    .rev-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(34,42,53,0.12);
+      display: grid;
+      place-items: center;
+      color: #6e6e73;
+      cursor: pointer;
+      transition: box-shadow 0.15s ease, color 0.15s ease;
     }
 
-    .dialog .arrow {
+    .rev-btn:hover { color: var(--ink); box-shadow: 0 0 0 1px rgba(34,42,53,0.25); }
+    .rev-btn svg { width: 15px; height: 15px; }
+
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #8d97a3;
+      text-transform: uppercase;
+    }
+
+    .reviewer .face {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #e8eaee;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      color: #6d7a88;
+    }
+
+    .todo { background: #fff3cd; border-radius: 4px; padding: 0 3px; }
+
+    /* blueprint crop-mark frame on hover (cal.com style) */
+    .sel {
       position: absolute;
-      right: 14px;
-      bottom: 8px;
-      animation: bounce 0.6s steps(2) infinite;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.13s ease;
+      z-index: 6;
     }
 
-    @keyframes bounce { 50% { transform: translateY(3px); } }
-    @keyframes blinkIn { from { opacity: 0; } to { opacity: 1; } }
+    .tile:hover > .sel { opacity: 1; }
+
+    .sel i {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      background: #fff;
+      border: 1px solid #b3b3b3;
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    /* frame floats 12px outside the card; lines stop short of the squares */
+    .sel .tl { top: -13px; left: -13px; }
+    .sel .tr { top: -13px; right: -13px; }
+    .sel .bl { bottom: -13px; left: -13px; }
+    .sel .br { bottom: -13px; right: -13px; }
+
+    .sel .ln { position: absolute; background: #cfcfcf; }
+    .sel .ln-t { top: -9px; left: -4px; right: -4px; height: 1px; }
+    .sel .ln-b { bottom: -9px; left: -4px; right: -4px; height: 1px; }
+    .sel .ln-l { left: -9px; top: -4px; bottom: -4px; width: 1px; }
+    .sel .ln-r { right: -9px; top: -4px; bottom: -4px; width: 1px; }
+
+    @media (max-width: 1000px) {
+      .statement, .rstack { grid-column: span 12; }
+      .frame-card, .building, .review { grid-column: span 6; }
+    }
+
+    @media (max-width: 680px) {
+      .frame-card, .building, .review { grid-column: span 12; }
+      .tile { padding: 24px; }
+
+      /* kickstarter stats fit the narrow card */
+      .ks-stats { gap: 0; justify-content: space-between; padding: 22px 0; }
+      .ks-stats b { font-size: 21px; }
+      .statement h2 { margin-top: 28px; }
+
+      /* experience rows: drop the description, tighten the meta */
+      .xp-who small { display: none; }
+      .xp-meta strong { font-size: 11px; }
+      .xp-row { padding: 13px 15px; gap: 11px; }
+      .xp-ava { width: 38px; height: 38px; font-size: 14px; }
+      .deck { height: 64px; }
+    }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <h1 class="title">MADSVENDELBO.COM</h1>
-    <canvas id="game" width="240" height="160"></canvas>
-    <div class="dialog"><span id="text"></span><span class="arrow">&#9660;</span></div>
-  </section>
+  <script src="/header.js" defer></script>
+  <script src="/cursor.js" defer></script>
+  <script src="/footer.js" defer></script>
+
+  <main class="bento">
+    <!-- statement -->
+    <a class="tile statement" data-name="kickstarter" href="https://www.kickstarter.com/projects/birdie-scandinavia/birdie-pro-your-fresh-air-pet" target="_blank" rel="noopener">
+      <span class="tile-label">latest launch</span>
+      <h2>We asked for $20,000.<br><em>Backers sent $1,013,211.</em></h2>
+      <p class="body">
+        I led the Kickstarter for <strong>Birdie&reg; Pro</strong> &mdash; the little air
+        monitor that drops dead when your air goes bad, and pops back up when you
+        open a window. 50&times; over goal, with a Gold iF Design Award along the way.
+      </p>
+      <div class="ks-stats">
+        <div><b>$1M+</b><span>pledged</span></div>
+        <div><b>3,706</b><span>backers</span></div>
+        <div><b>5,065%</b><span>funded</span></div>
+      </div>
+      <div class="foot">
+        <span>KICKSTARTER &mdash; BIRDIE&reg; PRO, 2026</span>
+        <span class="avail">PROJECT WE LOVE</span>
+      </div>
+    </a>
+
+    <!-- right stack -->
+    <div class="rstack">
+      <section class="tile xp" data-name="experience">
+        <span class="tile-label">experience</span>
+        <div class="deck">
+          <div class="xp-row pos-0">
+            <span class="xp-ava">🐥</span>
+            <span class="xp-who">
+              <strong>Birdie</strong>
+              <small>The iconic air monitor</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Head of Digital Growth</strong>
+              <small class="xp-period now">Now</small>
+            </span>
+          </div>
+          <div class="xp-row pos-1">
+            <span class="xp-ava">P</span>
+            <span class="xp-who">
+              <strong>Passim</strong>
+              <small>My own growth consultancy</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Consultant &amp; Advisor</strong>
+              <small class="xp-period">2018&ndash;2026</small>
+            </span>
+          </div>
+          <div class="xp-row pos-2">
+            <span class="xp-ava">B</span>
+            <span class="xp-who">
+              <strong>Bearaby</strong>
+              <small>NYC weighted blanket brand</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Ecommerce &amp; SEO Strategy</strong>
+              <small class="xp-period">2022&ndash;2025</small>
+            </span>
+          </div>
+          <div class="xp-row pos-3">
+            <span class="xp-ava">N</span>
+            <span class="xp-who">
+              <strong>Nordic Cosmetics</strong>
+              <small>CBD skincare brand</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Strategist &amp; Growth Lead</strong>
+              <small class="xp-period">2021&ndash;2022</small>
+            </span>
+          </div>
+          <div class="xp-row pos-3">
+            <span class="xp-ava">N</span>
+            <span class="xp-who">
+              <strong>Nordic Oil</strong>
+              <small>European CBD brand</small>
+            </span>
+            <span class="xp-meta">
+              <strong>SEO &amp; Ecommerce</strong>
+              <small class="xp-period">2018&ndash;2021</small>
+            </span>
+          </div>
+          <div class="xp-row pos-3">
+            <span class="xp-ava">BH</span>
+            <span class="xp-who">
+              <strong>By &amp; Havn</strong>
+              <small>Copenhagen&rsquo;s city development company</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Digital Consultant</strong>
+              <small class="xp-period">2018&ndash;2021</small>
+            </span>
+          </div>
+          <div class="xp-row pos-3">
+            <span class="xp-ava">F</span>
+            <span class="xp-who">
+              <strong>Freeletics</strong>
+              <small>Munich fitness app</small>
+            </span>
+            <span class="xp-meta">
+              <strong>SEO Consultant</strong>
+              <small class="xp-period">2018&ndash;2019</small>
+            </span>
+          </div>
+          <div class="xp-row pos-3">
+            <span class="xp-ava">E</span>
+            <span class="xp-who">
+              <strong>EECD Startup Studio</strong>
+              <small>Munich venture studio</small>
+            </span>
+            <span class="xp-meta">
+              <strong>Ecommerce &amp; Operations</strong>
+              <small class="xp-period">2016&ndash;2018</small>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="tile caps" data-name="side project">
+        <span class="tile-label">side project</span>
+        <div class="sp-head">
+          <span class="sp-ava">🎨</span>
+          <span class="sp-who">
+            <strong>Pinch of Design</strong>
+            <small>Facebook community &middot; website launching soon</small>
+          </span>
+        </div>
+        <h3 class="sp-title">Where 80,000 Danish design lovers find curated objects, their own style, and the next fleamarket worth a Saturday</h3>
+        <div class="sp-pills">
+          <span class="sp-pill">80k+ members</span>
+          <span class="sp-pill">Newsletter soon</span>
+          <span class="sp-pill">Site in the making</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- bottom row -->
+    <a class="tile frame-card" href="/about" data-name="hero.frame">
+      <span class="tile-label">hero.frame</span>
+      <div class="mini-wrap">
+        <div class="mini-frame">
+          <span class="dot">● CREATIVE THINKING</span>
+          <h3><span class="ln ln-1">Problems in.</span> <em class="ln ln-2">Systems out.</em></h3>
+          <span class="mini-btn">See how &rarr;</span>
+          <span class="live-sel"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></span>
+          <span class="live-dim">&mdash;</span>
+          <span class="live-curs">
+            <svg width="17" height="17" viewBox="0 0 24 24"><path d="M4 2 L18.5 10.8 L11.3 12.2 L7.6 18.8 Z" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span class="lab">Mads</span>
+          </span>
+        </div>
+      </div>
+      <div class="frame-foot">
+        <span>BUILT LIVE</span>
+        <span class="frame-badge">systems<small>since 2016</small></span>
+      </div>
+    </a>
+
+    <section class="tile building" data-name="building">
+      <span class="dn-sky sky-day"></span>
+      <span class="dn-sky sky-night"></span>
+      <span class="busy-celestial" role="img" aria-label="Time of day in Copenhagen">
+        <svg class="dn-sun" viewBox="0 0 24 24" fill="none" stroke="#f5b21a" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="#ffd84d" stroke="none"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="dn-moon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e8e6da"/><circle cx="9" cy="10" r="2" fill="#cfccbc"/><circle cx="14.5" cy="15" r="1.4" fill="#cfccbc"/><circle cx="15" cy="8.5" r="1" fill="#cfccbc"/></svg>
+      </span>
+      <span class="tile-label busy-label">most likely</span>
+      <div class="busy-inner">
+        <div class="busy-title" id="busy-title">&hellip;</div>
+        <div class="busy-foot">
+          <div class="busy-bar">
+            <span class="track"><i id="busy-fill"></i></span>
+            <span id="busy-pct">--%</span>
+          </div>
+          <div class="busy-meta">
+            <span id="busy-delta"></span>
+            <span class="busy-badge" id="busy-sun">&#9728; --:-- &nbsp;&#9790; --:--</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tile review" data-name="review_01">
+      <span class="tile-label" id="rev-label">review_01</span>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <blockquote id="rev-quote"></blockquote>
+      <div class="rev-foot">
+        <div class="reviewer">
+          <span class="face" id="rev-face">??</span>
+          <span id="rev-who"></span>
+        </div>
+        <div class="rev-nav">
+          <button class="rev-btn" id="rev-prev" aria-label="Previous review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button class="rev-btn" id="rev-next" aria-label="Next review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    // ---------- Game Boy palette ----------
-    const PAL = { 1: "#0f380f", 2: "#306230", 3: "#8bac0f", 4: "#9bbc0f" };
-    const W = 240, H = 160, TILE = 16;
+    // experience deck: drag the front card away, or scroll to flip through
+    (function () {
+      const deck = document.querySelector(".deck");
+      const slots = ["pos-0", "pos-1", "pos-2", "pos-3"];
+      let order = [...deck.querySelectorAll(".xp-row")];
 
-    // ---------- sprites (16x16, chars index PAL, "." = transparent) ----------
-    const SPRITES = {
-      down: [[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....13333331....",
-        "....13133131....",
-        "....13333331....",
-        ".....111111.....",
-        "....12222221....",
-        "...1222222221...",
-        "...1232222321...",
-        "....12222221....",
-        "....11111111....",
-        "....121..121....",
-        "....121..121....",
-        "....11....11....",
-      ],[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....13333331....",
-        "....13133131....",
-        "....13333331....",
-        ".....111111.....",
-        "....12222221....",
-        "...1222222221...",
-        "...1232222321...",
-        "....12222221....",
-        "....11111111....",
-        "....121..121....",
-        "....121...11....",
-        "....11..........",
-      ]],
-      up: [[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....14444441....",
-        "....11444411....",
-        "....11111111....",
-        ".....111111.....",
-        "....12222221....",
-        "...1222222221...",
-        "...1232222321...",
-        "....12222221....",
-        "....11111111....",
-        "....121..121....",
-        "....121..121....",
-        "....11....11....",
-      ],[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....14444441....",
-        "....11444411....",
-        "....11111111....",
-        ".....111111.....",
-        "....12222221....",
-        "...1222222221...",
-        "...1232222321...",
-        "....12222221....",
-        "....11111111....",
-        "....121..121....",
-        "....11...121....",
-        "..........11....",
-      ]],
-      side: [[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....13333331....",
-        "....13333131....",
-        "....13333331....",
-        ".....111111.....",
-        "....12222221....",
-        "....12222221....",
-        "....12232221....",
-        "....12222221....",
-        "....11111111....",
-        ".....121121.....",
-        ".....121.121....",
-        ".....11...11....",
-      ],[
-        "......1111......",
-        ".....144441.....",
-        "....14444441....",
-        "....11111111....",
-        "....13333331....",
-        "....13333131....",
-        "....13333331....",
-        ".....111111.....",
-        "....12222221....",
-        "....12222221....",
-        "....12232221....",
-        "....12222221....",
-        "....11111111....",
-        "....121..121....",
-        "...121....121...",
-        "...11......11...",
-      ]],
-    };
-
-    const TREE = [
-      "....11111111....",
-      "...1222222221...",
-      "..122322232221..",
-      ".12222222222221.",
-      ".12322223222321.",
-      ".12222222222221.",
-      ".12232222232221.",
-      "..122222222221..",
-      "...1222222221...",
-      "....11111111....",
-      "......1221......",
-      "......1221......",
-      ".....122221.....",
-      "....11111111....",
-      "................",
-      "................",
-    ];
-
-    // ---------- canvas setup ----------
-    const cv = document.getElementById("game");
-    const ctx = cv.getContext("2d");
-
-    function fit() {
-      const availW = window.innerWidth - 32;
-      const availH = window.innerHeight * 0.62;
-      const scale = Math.max(1, Math.floor(Math.min(availW / W, availH / H)));
-      cv.style.width = W * scale + "px";
-      cv.style.height = H * scale + "px";
-    }
-    fit();
-    window.addEventListener("resize", fit);
-
-    function drawSprite(rows, x, y, flip) {
-      x = Math.round(x); y = Math.round(y);
-      for (let r = 0; r < rows.length; r++) {
-        for (let c = 0; c < 16; c++) {
-          const ch = rows[r][flip ? 15 - c : c];
-          if (ch !== ".") {
-            ctx.fillStyle = PAL[ch];
-            ctx.fillRect(x + c, y + r, 1, 1);
-          }
-        }
+      function render() {
+        order.forEach((row, i) => {
+          slots.forEach(c => row.classList.remove(c));
+          row.classList.add(slots[Math.min(i, 3)]);
+        });
       }
-    }
+      const next = () => { order.push(order.shift()); render(); };
+      const prev = () => { order.unshift(order.pop()); render(); };
 
-    // ---------- static scene, pre-rendered once ----------
-    const scene = document.createElement("canvas");
-    scene.width = W; scene.height = H;
-    const sctx = scene.getContext("2d");
+      let lastWheel = 0;
+      deck.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const now = Date.now();
+        if (now - lastWheel < 350) return;
+        lastWheel = now;
+        (e.deltaY > 0 || e.deltaX > 0) ? next() : prev();
+      }, { passive: false });
 
-    function px(x, y, w, h, col) { sctx.fillStyle = PAL[col]; sctx.fillRect(x, y, w, h); }
-
-    function drawHouse(x, y, w, h, variant) {
-      const roofH = Math.floor(h * 0.45);
-      // roof with stripes + outline
-      px(x - 2, y, w + 4, roofH, 1);
-      for (let i = 2; i < roofH - 2; i += 2) px(x, y + i, w, 1, variant ? 2 : 3);
-      px(x - 2, y + roofH - 1, w + 4, 2, 1);
-      // wall
-      px(x, y + roofH, w, h - roofH, 3);
-      px(x, y + roofH, 1, h - roofH, 1);
-      px(x + w - 1, y + roofH, 1, h - roofH, 1);
-      px(x, y + h - 1, w, 1, 1);
-      // door
-      const dw = 10, dh = 13, dx = x + 5, dy = y + h - dh;
-      px(dx - 1, dy - 1, dw + 2, dh + 1, 1);
-      px(dx, dy, dw, dh, 2);
-      px(dx + dw - 3, dy + 6, 1, 2, 4); // handle
-      // window
-      const wx = x + w - 14, wy = y + roofH + 4;
-      px(wx - 1, wy - 1, 10, 10, 1);
-      px(wx, wy, 8, 8, 4);
-      px(wx + 3, wy, 2, 8, 1);
-      px(wx, wy + 3, 8, 2, 1);
-    }
-
-    // grass
-    px(0, 0, W, H, 4);
-    // grass tufts (deterministic scatter)
-    for (let i = 0; i < 90; i++) {
-      const gx = (i * 53 + 17) % (W - 32) + 16;
-      const gy = (i * 37 + 29) % (H - 32) + 16;
-      px(gx, gy, 2, 1, 3); px(gx + 1, gy - 1, 1, 1, 3);
-    }
-    // path
-    px(16, 96, W - 32, 14, 3);
-    for (let i = 0; i < 20; i++) px((i * 29 + 20) % (W - 40) + 20, 98 + ((i * 13) % 10), 2, 1, 2);
-    // flowers along the path
-    const FLOWERS = [];
-    for (let i = 0; i < 12; i++) FLOWERS.push([(i * 47 + 25) % (W - 48) + 24, i % 2 ? 88 : 114]);
-    // houses: three of them
-    drawHouse(28, 24, 44, 38, 0);
-    drawHouse(98, 18, 48, 44, 1);
-    drawHouse(172, 24, 44, 38, 0);
-    // tree border
-    for (let x = 0; x < W; x += TILE) {
-      drawSpriteTo(sctx, TREE, x, -6);
-      drawSpriteTo(sctx, TREE, x, H - 12);
-    }
-    for (let y = 8; y < H - 14; y += 14) {
-      drawSpriteTo(sctx, TREE, 0, y);
-      drawSpriteTo(sctx, TREE, W - TILE, y);
-    }
-
-    function drawSpriteTo(c, rows, x, y) {
-      for (let r = 0; r < rows.length; r++)
-        for (let col = 0; col < 16; col++) {
-          const ch = rows[r][col];
-          if (ch !== ".") { c.fillStyle = PAL[ch]; c.fillRect(x + col, y + r, 1, 1); }
-        }
-    }
-
-    // ---------- the little guy ----------
-    const guy = {
-      x: 112, y: 116,
-      tx: 112, ty: 116,
-      dir: "down", flip: false,
-      frame: 0, tick: 0, moving: false,
-      speed: 1.1,
-    };
-
-    function setTarget(clientX, clientY) {
-      const r = cv.getBoundingClientRect();
-      const gx = (clientX - r.left) / (r.width / W) - 8;
-      const gy = (clientY - r.top) / (r.height / H) - 8;
-      guy.tx = Math.max(14, Math.min(W - 30, gx));
-      guy.ty = Math.max(10, Math.min(H - 28, gy));
-    }
-    cv.addEventListener("mousemove", e => setTarget(e.clientX, e.clientY));
-    cv.addEventListener("touchmove", e => { e.preventDefault(); setTarget(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
-    cv.addEventListener("touchstart", e => setTarget(e.touches[0].clientX, e.touches[0].clientY));
-
-    let flowerPhase = 0, globalTick = 0;
-
-    function step() {
-      const dx = guy.tx - guy.x, dy = guy.ty - guy.y;
-      const dist = Math.hypot(dx, dy);
-      guy.moving = dist > 1.5;
-      if (guy.moving) {
-        guy.x += (dx / dist) * guy.speed;
-        guy.y += (dy / dist) * guy.speed;
-        if (Math.abs(dx) > Math.abs(dy)) { guy.dir = "side"; guy.flip = dx < 0; }
-        else { guy.dir = dy < 0 ? "up" : "down"; guy.flip = false; }
-        if (++guy.tick > 8) { guy.tick = 0; guy.frame = 1 - guy.frame; }
-      } else {
-        guy.frame = 0;
+      let drag = null;
+      deck.addEventListener("pointerdown", (e) => {
+        const front = order[0];
+        if (!front.contains(e.target)) return;
+        drag = { y: e.clientY, eased: 0, front };
+        front.setPointerCapture(e.pointerId);
+        front.style.transition = "none";
+      });
+      deck.addEventListener("pointermove", (e) => {
+        if (!drag) return;
+        // rubber-band: follows the pointer vertically but never leaves the card
+        drag.eased = Math.tanh((e.clientY - drag.y) / 90) * 42;
+        drag.front.style.transform = "translateY(" + drag.eased + "px)";
+      });
+      function endDrag() {
+        if (!drag) return;
+        drag.front.style.transition = "";
+        drag.front.style.transform = "";
+        if (drag.eased > 22) next();
+        else if (drag.eased < -22) prev();
+        drag = null;
       }
-
-      if (++globalTick % 40 === 0) flowerPhase = 1 - flowerPhase;
-
-      // render
-      ctx.clearRect(0, 0, W, H);
-      ctx.drawImage(scene, 0, 0);
-      for (const [fx, fy] of FLOWERS) {
-        ctx.fillStyle = PAL[1];
-        ctx.fillRect(fx + 1, fy + 1, 1, 2);
-        ctx.fillStyle = PAL[flowerPhase ? 2 : 1];
-        ctx.fillRect(fx, fy - 1 + flowerPhase, 3, 2);
-      }
-      drawSprite(SPRITES[guy.dir][guy.moving ? guy.frame : 0], guy.x, guy.y, guy.flip);
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-
-    // ---------- dialog typewriter ----------
-    const MSG = "Hi! I'm MADS. Welcome to my site! Move the cursor and I'll follow.";
-    const el = document.getElementById("text");
-    let ci = 0;
-    (function type() {
-      if (ci <= MSG.length) { el.textContent = MSG.slice(0, ci++); setTimeout(type, 45); }
+      deck.addEventListener("pointerup", endDrag);
+      deck.addEventListener("pointercancel", endDrag);
     })();
+
+    // "probably busy": sky, title, and sun/moon arc follow Copenhagen's day
+    (function () {
+      const card = document.querySelector(".building");
+      const title = document.getElementById("busy-title");
+      const cel = card.querySelector(".busy-celestial");
+
+      function cphTime() {
+        const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Copenhagen", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date()).split(":");
+        return parseInt(parts[0], 10) + parseInt(parts[1], 10) / 60;
+      }
+
+      function apply() {
+        const h = cphTime();
+        const night = h >= 22 || h < 7;
+        card.classList.toggle("night", night);
+
+        title.textContent =
+          night ? "Recharging" :
+          h < 9 ? "Caffeinating" :
+          h < 17 ? "Shipping things" : "Closing tabs";
+
+        // arc progress: night maps 22:00->07:00, day maps 07:00->22:00
+        const p = night ? ((h - 22 + 24) % 24) / 9 : (h - 7) / 15;
+        cel.style.left = (6 + p * 78) + "%";
+        cel.style.top = (58 - Math.sin(p * Math.PI) * 44) + "%";
+
+        // recharging progress bar (night phase only)
+        if (night) {
+          document.getElementById("busy-fill").style.width = Math.round(p * 100) + "%";
+          document.getElementById("busy-pct").textContent = Math.round(p * 100) + "%";
+        }
+
+        // visitor delta vs Copenhagen
+        const localH = new Date().getHours() + new Date().getMinutes() / 60;
+        let delta = Math.round(h - localH);
+        if (delta > 12) delta -= 24;
+        if (delta < -12) delta += 24;
+        document.getElementById("busy-delta").textContent =
+          delta === 0 ? "SAME TIME AS YOU" :
+          Math.abs(delta) + "H " + (delta > 0 ? "AHEAD OF" : "BEHIND") + " YOU";
+      }
+
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=55.68&longitude=12.57&daily=sunrise,sunset&timezone=Europe%2FCopenhagen&forecast_days=1")
+        .then(r => r.json())
+        .then(d => {
+          document.getElementById("busy-sun").innerHTML =
+            "&#9728; " + d.daily.sunrise[0].split("T")[1] + " &nbsp;&#9790; " + d.daily.sunset[0].split("T")[1];
+        })
+        .catch(() => {});
+
+      apply();
+      requestAnimationFrame(() => { cel.style.transition = "left 1.2s ease, top 1.2s ease"; });
+      setInterval(apply, 60000);
+    })();
+
+    // "built live" loop on the hero.frame card
+    (function () {
+      const card = document.querySelector(".frame-card");
+      const frame = card.querySelector(".mini-frame");
+      const dim = card.querySelector(".live-dim");
+      const STATES = ["grow", "show-eyeb", "show-l1", "show-l2", "show-btn", "done", "fade-out", "c-text", "c-btn"];
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        card.classList.add("grow", "show-eyeb", "show-l1", "show-l2", "show-btn", "done");
+        card.querySelector(".live-curs").style.display = "none";
+        dim.style.display = "none";
+        return;
+      }
+
+      let raf;
+      function trackDim() {
+        dim.textContent = Math.round(frame.offsetWidth) + " \u00d7 " + Math.round(frame.offsetHeight);
+        raf = requestAnimationFrame(trackDim);
+      }
+
+      function play() {
+        card.classList.remove(...STATES);
+        trackDim();
+        const steps = [
+          [350, () => card.classList.add("grow")],
+          [1500, () => { cancelAnimationFrame(raf); card.classList.add("show-eyeb", "c-text"); }],
+          [2300, () => card.classList.add("show-l1")],
+          [2950, () => card.classList.add("show-l2")],
+          [3700, () => card.classList.add("c-btn")],
+          [4500, () => card.classList.add("show-btn", "done")],
+          [7200, () => card.classList.add("fade-out")],
+          [7800, play],
+        ];
+        steps.forEach(([t, fn]) => setTimeout(fn, t));
+      }
+      play();
+    })();
+
+    // review pagination
+    (function () {
+      // TODO: real quotes — ask colleagues/clients!
+      const REVIEWS = [
+        { q: '"[A short quote from someone you\'ve worked with — ask a colleague or client!]"', face: "??", who: "[NAME] · [ROLE]" },
+        { q: '"[Second quote — a founder or CMO you advised]"', face: "??", who: "[NAME] · [ROLE]" },
+        { q: '"[Third quote — a teammate from Birdie or Bearaby]"', face: "??", who: "[NAME] · [ROLE]" },
+      ];
+      const card = document.querySelector(".review");
+      const quote = document.getElementById("rev-quote");
+      const face = document.getElementById("rev-face");
+      const who = document.getElementById("rev-who");
+      const label = document.getElementById("rev-label");
+      let i = 0;
+
+      function render() {
+        const r = REVIEWS[i];
+        quote.textContent = r.q;
+        face.textContent = r.face;
+        who.textContent = r.who;
+        const name = "review_0" + (i + 1);
+        label.textContent = name;
+        card.dataset.name = name;
+      }
+
+      function go(dir) {
+        i = (i + dir + REVIEWS.length) % REVIEWS.length;
+        card.classList.add("swapping");
+        setTimeout(() => { render(); card.classList.remove("swapping"); }, 180);
+      }
+
+      document.getElementById("rev-prev").addEventListener("click", () => go(-1));
+      document.getElementById("rev-next").addEventListener("click", () => go(1));
+      render();
+    })();
+
+    // figma-style selection frame per tile
+    document.querySelectorAll(".tile[data-name]").forEach((tile) => {
+      const sel = document.createElement("div");
+      sel.className = "sel";
+      sel.innerHTML = '<span class="ln ln-t"></span><span class="ln ln-b"></span>' +
+        '<span class="ln ln-l"></span><span class="ln ln-r"></span>' +
+        '<i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>';
+      tile.appendChild(sel);
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Mads Vendelbo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    .links-grid {
+      max-width: var(--page-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+
+    .links-grid .link-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 300px;
+      grid-column: span 2;
+      cursor: pointer;
+    }
+
+    .link-card.short { min-height: 200px; }
+    .link-card.span6 { grid-column: span 6; }
+
+    .link-card .label { color: var(--muted); font-size: 16px; font-weight: 500; }
+
+    .link-card .bottom {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: clamp(20px, 2vw, 26px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .arrow-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: grid;
+      place-items: center;
+      color: #a1a1a6;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .arrow-btn svg { width: 16px; height: 16px; }
+
+    .link-card:hover .arrow-btn { transform: translate(2px, -2px); color: var(--ink); }
+
+    .brand {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand.cv { background: #2563eb; font-size: 13px; letter-spacing: 0.03em; }
+    .brand.ig { background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
+    .brand.li { background: #0a66c2; font-size: 17px; }
+    .brand.mail { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+
+    @media (max-width: 900px) {
+      .links-grid .link-card { grid-column: span 6; min-height: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <script src="/header.js" defer></script>
+  <script src="/cursor.js" defer></script>
+  <script src="/footer.js" defer></script>
+  <main class="links-grid">
+    <!-- TODO: swap # for your real profile URLs -->
+    <a class="card-link link-card card" href="#" aria-label="View CV">
+      <span class="label">Learn more</span>
+      <span class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      <span class="bottom"><span class="brand cv">CV</span>View CV</span>
+    </a>
+
+    <a class="card-link link-card card" href="#" aria-label="Instagram">
+      <span class="label">Follow</span>
+      <span class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      <span class="bottom"><span class="brand ig">📷</span>Instagram</span>
+    </a>
+
+    <a class="card-link link-card card" href="#" aria-label="LinkedIn">
+      <span class="label">Connect</span>
+      <span class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      <span class="bottom"><span class="brand li">in</span>LinkedIn</span>
+    </a>
+
+    <div class="link-card card short span6" id="copy-email" role="button" tabindex="0" aria-label="Copy email address">
+      <span class="label" id="copy-label">Say Hi</span>
+      <span class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></span>
+      <span class="bottom"><span class="brand mail">✉️</span>mv@passim.dk</span>
+    </div>
+  </main>
+
+  <script>
+    // copy email
+    const copyCard = document.getElementById("copy-email");
+    const copyLabel = document.getElementById("copy-label");
+    copyCard.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText("mv@passim.dk");
+        copyLabel.textContent = "Copied!";
+        setTimeout(() => copyLabel.textContent = "Say Hi", 1600);
+      } catch { location.href = "mailto:mv@passim.dk"; }
+    });
+  </script>
+</body>
+</html>

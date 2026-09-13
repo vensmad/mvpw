@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mads Vendelbo</title>
+  <meta name="description" content="Mads Vendelbo — welcome to my little corner of the internet.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gb-darkest: #0f380f;
+      --gb-dark: #306230;
+      --gb-light: #8bac0f;
+      --gb-lightest: #9bbc0f;
+    }
+
+    body {
+      background: var(--gb-darkest);
+      font-family: "Press Start 2P", monospace;
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 16px;
+    }
+
+    .title {
+      color: var(--gb-lightest);
+      font-size: clamp(10px, 2.2vw, 18px);
+      letter-spacing: 2px;
+      text-align: center;
+      animation: blinkIn 0.1s 0.2s both;
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      cursor: crosshair;
+    }
+
+    .dialog {
+      width: min(92vw, 640px);
+      background: var(--gb-lightest);
+      color: var(--gb-darkest);
+      border: 4px solid var(--gb-darkest);
+      box-shadow: inset 0 0 0 3px var(--gb-lightest), inset 0 0 0 6px var(--gb-darkest);
+      padding: 18px 22px;
+      font-size: clamp(8px, 1.6vw, 12px);
+      line-height: 1.9;
+      min-height: 64px;
+      position: relative;
+    }
+
+    .dialog .arrow {
+      position: absolute;
+      right: 14px;
+      bottom: 8px;
+      animation: bounce 0.6s steps(2) infinite;
+    }
+
+    @keyframes bounce { 50% { transform: translateY(3px); } }
+    @keyframes blinkIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1 class="title">MADSVENDELBO.COM</h1>
+    <canvas id="game" width="240" height="160"></canvas>
+    <div class="dialog"><span id="text"></span><span class="arrow">&#9660;</span></div>
+  </section>
+
+  <script>
+    // ---------- Game Boy palette ----------
+    const PAL = { 1: "#0f380f", 2: "#306230", 3: "#8bac0f", 4: "#9bbc0f" };
+    const W = 240, H = 160, TILE = 16;
+
+    // ---------- sprites (16x16, chars index PAL, "." = transparent) ----------
+    const SPRITES = {
+      down: [[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....13333331....",
+        "....13133131....",
+        "....13333331....",
+        ".....111111.....",
+        "....12222221....",
+        "...1222222221...",
+        "...1232222321...",
+        "....12222221....",
+        "....11111111....",
+        "....121..121....",
+        "....121..121....",
+        "....11....11....",
+      ],[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....13333331....",
+        "....13133131....",
+        "....13333331....",
+        ".....111111.....",
+        "....12222221....",
+        "...1222222221...",
+        "...1232222321...",
+        "....12222221....",
+        "....11111111....",
+        "....121..121....",
+        "....121...11....",
+        "....11..........",
+      ]],
+      up: [[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....14444441....",
+        "....11444411....",
+        "....11111111....",
+        ".....111111.....",
+        "....12222221....",
+        "...1222222221...",
+        "...1232222321...",
+        "....12222221....",
+        "....11111111....",
+        "....121..121....",
+        "....121..121....",
+        "....11....11....",
+      ],[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....14444441....",
+        "....11444411....",
+        "....11111111....",
+        ".....111111.....",
+        "....12222221....",
+        "...1222222221...",
+        "...1232222321...",
+        "....12222221....",
+        "....11111111....",
+        "....121..121....",
+        "....11...121....",
+        "..........11....",
+      ]],
+      side: [[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....13333331....",
+        "....13333131....",
+        "....13333331....",
+        ".....111111.....",
+        "....12222221....",
+        "....12222221....",
+        "....12232221....",
+        "....12222221....",
+        "....11111111....",
+        ".....121121.....",
+        ".....121.121....",
+        ".....11...11....",
+      ],[
+        "......1111......",
+        ".....144441.....",
+        "....14444441....",
+        "....11111111....",
+        "....13333331....",
+        "....13333131....",
+        "....13333331....",
+        ".....111111.....",
+        "....12222221....",
+        "....12222221....",
+        "....12232221....",
+        "....12222221....",
+        "....11111111....",
+        "....121..121....",
+        "...121....121...",
+        "...11......11...",
+      ]],
+    };
+
+    const TREE = [
+      "....11111111....",
+      "...1222222221...",
+      "..122322232221..",
+      ".12222222222221.",
+      ".12322223222321.",
+      ".12222222222221.",
+      ".12232222232221.",
+      "..122222222221..",
+      "...1222222221...",
+      "....11111111....",
+      "......1221......",
+      "......1221......",
+      ".....122221.....",
+      "....11111111....",
+      "................",
+      "................",
+    ];
+
+    // ---------- canvas setup ----------
+    const cv = document.getElementById("game");
+    const ctx = cv.getContext("2d");
+
+    function fit() {
+      const availW = window.innerWidth - 32;
+      const availH = window.innerHeight * 0.62;
+      const scale = Math.max(1, Math.floor(Math.min(availW / W, availH / H)));
+      cv.style.width = W * scale + "px";
+      cv.style.height = H * scale + "px";
+    }
+    fit();
+    window.addEventListener("resize", fit);
+
+    function drawSprite(rows, x, y, flip) {
+      x = Math.round(x); y = Math.round(y);
+      for (let r = 0; r < rows.length; r++) {
+        for (let c = 0; c < 16; c++) {
+          const ch = rows[r][flip ? 15 - c : c];
+          if (ch !== ".") {
+            ctx.fillStyle = PAL[ch];
+            ctx.fillRect(x + c, y + r, 1, 1);
+          }
+        }
+      }
+    }
+
+    // ---------- static scene, pre-rendered once ----------
+    const scene = document.createElement("canvas");
+    scene.width = W; scene.height = H;
+    const sctx = scene.getContext("2d");
+
+    function px(x, y, w, h, col) { sctx.fillStyle = PAL[col]; sctx.fillRect(x, y, w, h); }
+
+    function drawHouse(x, y, w, h, variant) {
+      const roofH = Math.floor(h * 0.45);
+      // roof with stripes + outline
+      px(x - 2, y, w + 4, roofH, 1);
+      for (let i = 2; i < roofH - 2; i += 2) px(x, y + i, w, 1, variant ? 2 : 3);
+      px(x - 2, y + roofH - 1, w + 4, 2, 1);
+      // wall
+      px(x, y + roofH, w, h - roofH, 3);
+      px(x, y + roofH, 1, h - roofH, 1);
+      px(x + w - 1, y + roofH, 1, h - roofH, 1);
+      px(x, y + h - 1, w, 1, 1);
+      // door
+      const dw = 10, dh = 13, dx = x + 5, dy = y + h - dh;
+      px(dx - 1, dy - 1, dw + 2, dh + 1, 1);
+      px(dx, dy, dw, dh, 2);
+      px(dx + dw - 3, dy + 6, 1, 2, 4); // handle
+      // window
+      const wx = x + w - 14, wy = y + roofH + 4;
+      px(wx - 1, wy - 1, 10, 10, 1);
+      px(wx, wy, 8, 8, 4);
+      px(wx + 3, wy, 2, 8, 1);
+      px(wx, wy + 3, 8, 2, 1);
+    }
+
+    // grass
+    px(0, 0, W, H, 4);
+    // grass tufts (deterministic scatter)
+    for (let i = 0; i < 90; i++) {
+      const gx = (i * 53 + 17) % (W - 32) + 16;
+      const gy = (i * 37 + 29) % (H - 32) + 16;
+      px(gx, gy, 2, 1, 3); px(gx + 1, gy - 1, 1, 1, 3);
+    }
+    // path
+    px(16, 96, W - 32, 14, 3);
+    for (let i = 0; i < 20; i++) px((i * 29 + 20) % (W - 40) + 20, 98 + ((i * 13) % 10), 2, 1, 2);
+    // flowers along the path
+    const FLOWERS = [];
+    for (let i = 0; i < 12; i++) FLOWERS.push([(i * 47 + 25) % (W - 48) + 24, i % 2 ? 88 : 114]);
+    // houses: three of them
+    drawHouse(28, 24, 44, 38, 0);
+    drawHouse(98, 18, 48, 44, 1);
+    drawHouse(172, 24, 44, 38, 0);
+    // tree border
+    for (let x = 0; x < W; x += TILE) {
+      drawSpriteTo(sctx, TREE, x, -6);
+      drawSpriteTo(sctx, TREE, x, H - 12);
+    }
+    for (let y = 8; y < H - 14; y += 14) {
+      drawSpriteTo(sctx, TREE, 0, y);
+      drawSpriteTo(sctx, TREE, W - TILE, y);
+    }
+
+    function drawSpriteTo(c, rows, x, y) {
+      for (let r = 0; r < rows.length; r++)
+        for (let col = 0; col < 16; col++) {
+          const ch = rows[r][col];
+          if (ch !== ".") { c.fillStyle = PAL[ch]; c.fillRect(x + col, y + r, 1, 1); }
+        }
+    }
+
+    // ---------- the little guy ----------
+    const guy = {
+      x: 112, y: 116,
+      tx: 112, ty: 116,
+      dir: "down", flip: false,
+      frame: 0, tick: 0, moving: false,
+      speed: 1.1,
+    };
+
+    function setTarget(clientX, clientY) {
+      const r = cv.getBoundingClientRect();
+      const gx = (clientX - r.left) / (r.width / W) - 8;
+      const gy = (clientY - r.top) / (r.height / H) - 8;
+      guy.tx = Math.max(14, Math.min(W - 30, gx));
+      guy.ty = Math.max(10, Math.min(H - 28, gy));
+    }
+    cv.addEventListener("mousemove", e => setTarget(e.clientX, e.clientY));
+    cv.addEventListener("touchmove", e => { e.preventDefault(); setTarget(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+    cv.addEventListener("touchstart", e => setTarget(e.touches[0].clientX, e.touches[0].clientY));
+
+    let flowerPhase = 0, globalTick = 0;
+
+    function step() {
+      const dx = guy.tx - guy.x, dy = guy.ty - guy.y;
+      const dist = Math.hypot(dx, dy);
+      guy.moving = dist > 1.5;
+      if (guy.moving) {
+        guy.x += (dx / dist) * guy.speed;
+        guy.y += (dy / dist) * guy.speed;
+        if (Math.abs(dx) > Math.abs(dy)) { guy.dir = "side"; guy.flip = dx < 0; }
+        else { guy.dir = dy < 0 ? "up" : "down"; guy.flip = false; }
+        if (++guy.tick > 8) { guy.tick = 0; guy.frame = 1 - guy.frame; }
+      } else {
+        guy.frame = 0;
+      }
+
+      if (++globalTick % 40 === 0) flowerPhase = 1 - flowerPhase;
+
+      // render
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(scene, 0, 0);
+      for (const [fx, fy] of FLOWERS) {
+        ctx.fillStyle = PAL[1];
+        ctx.fillRect(fx + 1, fy + 1, 1, 2);
+        ctx.fillStyle = PAL[flowerPhase ? 2 : 1];
+        ctx.fillRect(fx, fy - 1 + flowerPhase, 3, 2);
+      }
+      drawSprite(SPRITES[guy.dir][guy.moving ? guy.frame : 0], guy.x, guy.y, guy.flip);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+
+    // ---------- dialog typewriter ----------
+    const MSG = "Hi! I'm MADS. Welcome to my site! Move the cursor and I'll follow.";
+    const el = document.getElementById("text");
+    let ci = 0;
+    (function type() {
+      if (ci <= MSG.length) { el.textContent = MSG.slice(0, ci++); setTimeout(type, 45); }
+    })();
+  </script>
+</body>
+</html>

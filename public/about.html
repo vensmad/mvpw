@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Mads Vendelbo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    .about-grid {
+      max-width: var(--page-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* journey card */
+    .journey h1 {
+      font-size: clamp(24px, 2.2vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e4e4e7;
+      margin-bottom: 24px;
+    }
+
+    .journey p {
+      font-size: 16px;
+      line-height: 1.65;
+      margin-bottom: 18px;
+      color: #3a3a3c;
+    }
+
+    .journey p:last-child { margin-bottom: 0; }
+
+    .todo { background: #fff8dc; border-radius: 4px; padding: 0 4px; }
+
+    /* right side: its own 2-col grid */
+    .side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .side .card { position: relative; padding: 24px; }
+
+    .corner-chip {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+      z-index: 1;
+    }
+
+    .corner-chip.dark { background: #111; }
+    .corner-chip.spotify { background: #1ed760; }
+
+    .photo-card { padding: 0; overflow: hidden; }
+    .photo-card .media { border-radius: var(--radius); border: 2px dashed #d4d4d8; min-height: 260px; }
+
+    .spotify-card .media { min-height: 150px; margin-bottom: 18px; }
+    .spotify-card .name { font-size: 20px; font-weight: 700; }
+    .spotify-card .name small { font-weight: 400; font-style: italic; font-size: 14px; margin-left: 4px; }
+
+    .wide-card {
+      grid-column: 1 / -1;
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .popcorn {
+      position: absolute;
+      left: -18px;
+      bottom: -14px;
+      font-size: 84px;
+      transform: rotate(-12deg);
+      filter: saturate(1.1);
+      pointer-events: none;
+    }
+
+    .dots { display: flex; }
+    .dots i {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      display: block;
+    }
+    .dots i:nth-child(1) { background: #ff8000; }
+    .dots i:nth-child(2) { background: #00e054; margin-left: -4px; }
+    .dots i:nth-child(3) { background: #40bcf4; margin-left: -4px; }
+
+    .wordmark { font-size: clamp(26px, 3vw, 40px); font-weight: 800; letter-spacing: -0.02em; }
+    .wordmark.serif { font-family: Georgia, serif; font-weight: 500; }
+    .small-card { min-height: 170px; display: grid; place-items: center; padding: 48px 20px 24px; }
+    .small-card .wordmark { font-size: clamp(20px, 2.2vw, 30px); }
+
+    @media (max-width: 1000px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <script src="/header.js" defer></script>
+  <script src="/cursor.js" defer></script>
+  <main class="about-grid">
+    <section class="card journey">
+      <h1>My journey.</h1>
+      <p>I'm Mads Vendelbo, Head of Growth — originally from <span class="todo">[hometown]</span>, Denmark 🇩🇰.</p>
+      <p><span class="todo">[How your career started — first job, study, or the moment you got hooked on growth/marketing.]</span></p>
+      <p>Today, I'm Head of Growth at Birdie, <span class="todo">[one line on what Birdie does and what you drive there]</span>.</p>
+      <p>Alongside that, I advise Torggler on <span class="todo">[what the advisory covers — funnel, pipeline, positioning]</span>.</p>
+      <p><span class="todo">[Something personal — sports, music, a hobby that shaped you.]</span></p>
+      <p>I'm passionate about <span class="todo">[what you care about — building things people actually use, shipping fast, teaching, …]</span>. This site is one of my experiments — I build it live with an AI pair programmer.</p>
+    </section>
+
+    <div class="side">
+      <div class="card photo-card">
+        <span class="corner-chip">🌸</span>
+        <div class="media">your photo</div>
+      </div>
+
+      <a class="card-link" href="#">
+        <div class="card spotify-card">
+          <span class="corner-chip spotify">🎵</span>
+          <div class="media">playlist cover</div>
+          <div class="name">Spotify <small>playlist</small></div>
+        </div>
+      </a>
+
+      <a class="card-link wide-card card" href="#">
+        <span class="corner-chip dark"><span class="dots"><i></i><i></i><i></i></span></span>
+        <span class="popcorn">🍿</span>
+        <span class="wordmark">Letterboxd</span>
+      </a>
+
+      <a class="card-link small-card card" href="#">
+        <span class="corner-chip">📚</span>
+        <span class="wordmark serif">goodreads</span>
+      </a>
+
+      <a class="card-link small-card card" href="#">
+        <span class="corner-chip dark">🎮</span>
+        <span class="wordmark">Backloggd</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
