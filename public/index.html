@@ -576,21 +576,7 @@
       .frame-card, .building, .review { grid-column: span 6; }
     }
 
-    .m-hero { display: none; }
-
     @media (max-width: 680px) {
-      .m-hero {
-        display: flex;
-        justify-content: center;
-        margin: -8px 0 20px;
-      }
-
-      .m-hero img {
-        width: min(58vw, 230px);
-        height: auto;
-        filter: drop-shadow(0 10px 24px rgba(19, 19, 22, 0.18));
-      }
-
       .frame-card, .building, .review { grid-column: span 12; }
       .tile { padding: 24px; }
 
@@ -612,8 +598,6 @@
   <script src="/header.js" defer></script>
   <script src="/cursor.js" defer></script>
   <script src="/footer.js" defer></script>
-
-  <div class="m-hero"><img src="/mvpw-header.png" alt="Mads Vendelbo"></div>
 
   <main class="bento">
     <!-- statement -->
